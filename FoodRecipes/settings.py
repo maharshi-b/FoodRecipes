@@ -41,6 +41,7 @@ DJANGO_APPS = [
 
 LOCAL_APPS = [
     'accounts.apps.AccountsConfig',
+    'recipes.apps.RecipesConfig',
 ]
 
 THIRD_PARTY_APPS = [
@@ -120,8 +121,8 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-LOGIN_REDIRECT_URL = 'home'
-LOGOUT_REDIRECT_URL = 'home'
+LOGIN_REDIRECT_URL = 'recipe:list'
+LOGOUT_REDIRECT_URL = 'recipe:list'
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
