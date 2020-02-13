@@ -13,6 +13,7 @@ class Ingredient(models.Model):
 class Recipe(models.Model):
     user = models.ForeignKey(User,on_delete=models.SET_NULL, related_name='recipes',null=True)
     name = models.CharField(max_length=250)
+    timestamp = models.DateTimeField(auto_now_add=True)
     description = models.TextField()
     steps = models.TextField()
     ingredients = models.ManyToManyField(Ingredient, related_name='recipes')

@@ -5,4 +5,5 @@ app_name = 'recipe'
 
 urlpatterns = [
     path('', views.RecipeList.as_view(), name='list'),
+    path('<int:pk>/', views.RecipeDetail.as_view(), name='detail'),
 ]

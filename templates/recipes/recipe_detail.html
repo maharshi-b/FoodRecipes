@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %}Food Recipes{% endblock %}
+
+{% block content %}
+
+<div class="py-5">
+    <div class="container mx-6">
+        <div class="row">
+            <div class='col-8'>
+                <h2>{{object.name}}</h4>
+                <p>{{object.timestamp|date}} by {{object.user.username}}</p>
+                <img src="" class="img-fluid" alt="{{object.name}}">
+                <hr>
+                <h3>Ingredients</h3>
+                <ul>
+                {% for indredient in object.ingredients.all %}
+                    <li>{{indredient.name}}</li>
+                {% endfor %}
+                </ul>
+                <hr>
+                <h3>Description</h3>
+                <p>{{object.description}}</p>
+                <hr>
+                <h3>Preparation Steps</h3>
+                <p>{{object.steps}}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
