@@ -10,7 +10,9 @@
             <div class='col-8'>
                 <h2>{{object.name}}</h4>
                 <p>{{object.timestamp|date}} by {{object.user.username}}</p>
-                <img src="" class="img-fluid" alt="{{object.name}}">
+                {% for image in object.image_set.all %}
+                    <img src="{{image.image.url}}" class="img-fluid" alt="{{object.name}}">
+                {% endfor %}
                 <hr>
                 <h3>Ingredients</h3>
                 <ul>
@@ -23,7 +25,12 @@
                 <p>{{object.description}}</p>
                 <hr>
                 <h3>Preparation Steps</h3>
-                <p>{{object.steps}}</p>
+                <ol>                
+                {% for step in object.step_set.all %}
+                    <li>{{step.description}}</li>
+                {% endfor %}
+                </ol>
+                
             </div>
         </div>
     </div>

@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% load crispy_forms_tags %}
+
+
+
+{% block title %}Food Recipes{% endblock %}
+
+{% block content %}
+
+<div class="py-5">
+    <div class="container mx-6">
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ recipe_form|crispy }}
+            <label style='display:block;'>
+                Image
+            </label>  
+            <input type="file" name="image" accept="image/*" class="clearablefileinput form-control" id="id_image" multiple required> 
+            
+            <div class="form-group"> 
+                <label style='display:block;'>
+                Ingredients
+                </label>  
+                <input type="text" name='ingredients' class="form-control" data-role="tagsinput">
+            </div> 
+            <button type="submit" class="btn btn-primary">Create</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
