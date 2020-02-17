@@ -10,17 +10,17 @@
 
 <div class="py-5">
     <div class="container mx-6 w-50">
-        <form method="POST" enctype="multipart/form-data">
+        <form method="POST" enctype="multipart/form-data" id='myForm'>
             {% csrf_token %}
             {{ form|crispy }}
             <div>
             <div class='container'>
                 <div class='row'>
-                {% for image in object.image_set.all%}
-                    <div class='col-lg-2 col-md-4 mx-2'>
+                {% for image in object.image_set.all %}
+                    <div class='col-lg-2 col-md-4 mx-2' id='img-{{image.pk}}'>
                         <div class='row my-2' style='height:100px'><image src={{image.image.url}} width='100px'></image></div>
                         
-                        <div class='row'><button type='button' id='del-{{image.pk}}' class='btn btn-small btn-danger' style='width:100px'>Delete</button></div>
+                        <div class='row'><button type='button' onclick='deleteImage({{image.pk}})' id='del-{{image.pk}}' class='btn btn-small btn-danger' style='width:100px'>Delete</button></div>
                         
                     </div>
                 {% endfor %}
@@ -59,7 +59,7 @@
             </div> 
             
             
-            <button type="submit" class="btn btn-primary btn-large btn-block">Save</button>
+            <button onclick="beforeSubmit();" type="button" class="btn btn-primary btn-large btn-block">Save</button>
         </form>
     </div>
 </div>
@@ -85,11 +85,65 @@
                 $("#remove").hide()
             }
         });
-
-        
-
         
     });
+
+    function beforeSubmit() {
+        $.each( deleteList , function( index, value ) {
+            formData = {
+                csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+            }
+            $.ajax({
+                type: 'POST',
+                url: '/image/' + value + '/delete/',
+                data : formData,
+                success: function (json) {
+                    console.log(json);
+                },
+                error: function (xhr, errmsg, err) {
+                    console.log(xhr.status + ": " + xhr.responseText);
+                }
+            });
+            
+        });
+            
+        $('#myForm').submit();
+    }
+
+
+    var deleteList = [];
+    
+    function deleteImage(pk) {
+        deleteList.push(pk)
+        imageDivId = "#img-" + pk.toString();
+        $(imageDivId).hide()
+        console.log(deleteList)
+    }
+
+
+       
+
 </script>
 {% endblock %}
 
+
+
+
+ 
+        {% comment %} formData = {
+            csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+        }
+            $.ajax({
+                type: 'POST',
+                url: '/image/' + pk + '/delete/',
+                data : formData,
+                success: function (json) {
+                   console.log(json);
+                   $('#del-' + pk).text('Deleted')
+                   $('#del-' + pk).disabled = true
+                },
+                error: function (xhr, errmsg, err) {
+                    console.log(xhr.status + ": " + xhr.responseText);
+                }
+            });
+        } {% endcomment %}

@@ -1,11 +1,38 @@
 from django.shortcuts import render, redirect
-from django.views.generic import ListView, DetailView, CreateView, View, UpdateView
+from django.urls import reverse_lazy
+from django.views.generic import ListView, DetailView, CreateView, View, UpdateView, DeleteView
 from .models import Recipe, Image, Ingredient, Step
+from django.http import Http404, JsonResponse
+
+class LoginRequiredMixin:
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return super().dispatch(request, *args, **kwargs)
+        else:
+            return redirect('login')
+
+class OwnerRequiredMixin:
+    def dispatch(self, request, pk, *args, **kwargs):
+        recipe = Recipe.objects.get(pk=pk)
+        if recipe.user == request.user:
+            return super().dispatch(request, pk, *args, **kwargs)
+        else:
+            raise Http404
+
+class ImageOwnerRequiredMixin:
+    def dispatch(self, request, pk, *args, **kwargs):
+        image = Image.objects.get(pk=pk)
+        if image.recipe.user == request.user:
+            return super().dispatch(request, pk, *args, **kwargs)
+        else:
+            raise Http404
+
+        
 
 # Create your views here.
 class RecipeList(ListView):
     model = Recipe
-    paginate_by = 2
+    paginate_by = 6
 
     def get_queryset(self):
         queryset = super(RecipeList, self).get_queryset()
@@ -19,7 +46,7 @@ class RecipeList(ListView):
         u = self.request.GET.get('u', None)
         if u is not None:
             queryset = queryset.filter(user=self.request.user)
-        return queryset
+        return queryset.order_by('-timestamp')
 
 
 
@@ -27,7 +54,7 @@ class RecipeDetail(DetailView):
     model = Recipe
 
 
-class RecipeCreate(CreateView):
+class RecipeCreate(LoginRequiredMixin, CreateView):
     model = Recipe
     fields = ['name','description']
     template_name = 'recipes/recipe_form.html'
@@ -49,9 +76,9 @@ class RecipeCreate(CreateView):
                 i = i + 1
             else:
                 break
-        return redirect('recipe:list')
+        return redirect('recipe:detail',pk=obj.pk)
 
-class RecipeUpdate(UpdateView):
+class RecipeUpdate(LoginRequiredMixin, OwnerRequiredMixin, UpdateView):
     model = Recipe
     fields = ['name','description']
     template_name = 'recipes/recipe_update_form.html'
@@ -76,4 +103,18 @@ class RecipeUpdate(UpdateView):
                 i = i + 1
             else:
                 break
-        return redirect('recipe:list')
+        return redirect('recipe:detail', pk=obj.pk)
+
+
+class RecipeDelete(LoginRequiredMixin, OwnerRequiredMixin , DeleteView):
+    model = Recipe
+    success_url = reverse_lazy('recipe:list')
+
+class ImageDelete(LoginRequiredMixin, ImageOwnerRequiredMixin, View):
+    def post(self, request, pk, *args, **kwargs):
+        image = Image.objects.get(pk=pk)
+        image.delete()
+        data = {
+            'success':True
+        }
+        return JsonResponse(data)

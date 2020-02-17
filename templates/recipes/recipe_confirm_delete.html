@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block title %}Food Recipes {% endblock %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<div class="px-5 py-5">
+  <div class="container w-50">
+    <form method="POST">
+      {% csrf_token %}
+      <p>Are you sure want to delete the Recipe {{object.name}}?<br>
+      <button type="submit" class="btn btn-danger">Yes Delete.</button>
+        <a href='{% url "recipe:detail" pk=object.pk %}' class="btn btn-secondary">No.</a>
+
+    </form>
+
+  </div>
+</div>
+{% endblock %}

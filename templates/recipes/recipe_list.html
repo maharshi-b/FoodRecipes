@@ -13,20 +13,20 @@
       
     {% for recipe in page_obj %}
             <div class="col-md-4">
-                <div class="card mb-4 shadow-sm" style='height:360px'>
-                    <div style='height:160px; overflow:hidden'>
+                <div class="card mb-4 shadow-lg" style='height:360px'>
+                    <div style='height:200px; overflow:hidden; padding:5px;'>
                         <img src="{{recipe.image_set.all.first.image.url}}" class="img-fluid card-img-top" alt="{{recipe.name}}">
                     </div>
                     <div class="card-body" style='height:60%'>
                         <h4 class='cart-title' style='height:20%'>{{recipe.name|truncatechars:20}}</h4>
                         <p class="card-text">by {{recipe.user.username}}</p>
-                        <div class="justify-content-left align-items-left" style='height:30%l; overflow:auto;'>
+                        <div class="justify-content-left align-items-left" style='height:30%; overflow:auto;'>
                             {% for ingredient in recipe.ingredients.all %}
                             <span class="badge badge-dark mr-2 mb-2">{{ingredient.name}}</span>
                             {% endfor %}
                         </div>
                         <div class="d-flex justify-content-between align-items-center" style='margin-bottom:10px;height:40%'>
-                            <a href="{% url 'recipe:detail' recipe.pk %}" class="btn btn-primary stretched-link">View</a>
+                            <a href="{% url 'recipe:detail' recipe.pk %}" class="stretched-link" ></a>
                             <small class="text-muted">{{recipe.timestamp|timesince}} ago</small>
                         </div>
                             
