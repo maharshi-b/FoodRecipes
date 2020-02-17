@@ -18,9 +18,6 @@ class Recipe(models.Model):
     description = models.TextField()
     ingredients = models.ManyToManyField(Ingredient, related_name='recipes')
 
-    def __str__(self):
-        return self.name[:30]
-
 class Image(models.Model):
     image = models.ImageField()
     recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)

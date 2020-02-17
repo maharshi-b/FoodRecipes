@@ -11,32 +11,41 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"</script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.8.0/bootstrap-tagsinput.js"></script>
-    <link rel="stylesheet" href="{% static 'bootstrap-tagsinput.css' %}">
+    <link href="https://fonts.googleapis.com/css?family=Lemonada|Montserrat&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="{% static 'css/bootstrap-tagsinput.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
 
 
     <title>{% block title %}{% endblock %}</title>
   </head>
   <body>
-  <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+  <nav class="navbar navbar-expand-md navbar-dark bg-dark nav-font">
     <a class="navbar-brand" href="{% url 'recipe:list' %}">Food Recipes</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample04" aria-controls="navbarsExample04" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
 
     <div class="collapse navbar-collapse" id="navbarsExample04">
-        <ul class="navbar-nav mr-auto">
-        <li class="nav-item active">
-            <a class="nav-link" href="{% url 'recipe:list' %}">Home <span class="sr-only">(current)</span></a>
-        </li>
-        {% if request.user.is_authenticated %}
+        <ul class="navbar-nav mr-auto" style="width:30%">
             <li class="nav-item">
-                <a class="nav-link" href="#">My Recipies</a>
+                <a class="nav-link" href="{% url 'recipe:list' %}">Home <span class="sr-only">(current)</span></a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'recipe:create' %}">Add Recipe</a>
-            </li>
-        {% endif %}
+            {% if request.user.is_authenticated %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'recipe:list' %}?u={{request.user.username}}">My Recipies</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'recipe:create' %}">Add Recipe</a>
+                </li>
+            {% endif %}
         </ul>
+        
+        <form class="form-inline my-2 my-lg-0" style='width:50%' action='{% url 'recipe:list' %}'>
+            <input name='q' class="form-control mr-sm-2" value ='{{request.GET.q}}'
+            type="text" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+        </form>
         <ul class="navbar-nav ml-auto">
         
         {% if not request.user.is_authenticated %}
@@ -47,15 +56,11 @@
                 <a class='nav-link' href={% url 'login' %}>Login</a>
             </li>
         {% else %}
-            <li class="nav-item">
+            <li class="nav-item mx-3">
                 <a class='nav-link' href={% url 'logout' %}>Logout</a>
             </li>
         {% endif %}
         </ul>
-        <form class="form-inline my-2 my-lg-0">
-            <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
-            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-        </form>
     </div>
     </nav>
   <div class="container-fluid">

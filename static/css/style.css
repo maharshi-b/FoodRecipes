@@ -1,0 +1,15 @@
+.nav-font{
+    font-family: 'Lemonada', cursive;
+    text-shadow: 4px 4px 4px #aaa;
+}
+body{
+    font-family: 'Montserrat', sans-serif;
+}
+
+.w-50{
+    width:50%;
+}
+
+.asteriskField{
+    display:none;
+}

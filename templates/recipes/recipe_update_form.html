@@ -7,39 +7,50 @@
 {% block title %}Food Recipes{% endblock %}
 
 {% block content %}
-<style>
-.my-btn{
-    margin-top:10px;
-    display:block;
-    width:100%;
-}
-</style>
 
 <div class="py-5">
     <div class="container mx-6 w-50">
         <form method="POST" enctype="multipart/form-data">
             {% csrf_token %}
             {{ form|crispy }}
-
+            <div>
+            <div class='container'>
+                <div class='row'>
+                {% for image in object.image_set.all%}
+                    <div class='col-lg-2 col-md-4 mx-2'>
+                        <div class='row my-2' style='height:100px'><image src={{image.image.url}} width='100px'></image></div>
+                        
+                        <div class='row'><button type='button' id='del-{{image.pk}}' class='btn btn-small btn-danger' style='width:100px'>Delete</button></div>
+                        
+                    </div>
+                {% endfor %}
+                </div>
+            </div>
+            </div>
+            <br>
             <label style='display:block;'>
-                Images
+                Add Images
             </label>  
-            <input type="file" name="image" accept="image/*" class="clearablefileinput form-control" id="id_image" multiple required> 
+            <input type="file" value='' name="image" accept="image/*" class="clearablefileinput form-control" id="id_image" multiple> 
             
             
             <div class="form-group"> 
                 <label style='display:block;'>
                 Ingredients
                 </label>  
-                <input type="text" name='ingredients' class="form-control" data-role="tagsinput">
-            </div>  
+                <input type="text" name='ingredients' class="form-control" 
+                value="{% for ing in object.ingredients.all %}{{ing}},{% endfor %}"
+                 data-role="tagsinput">
+            </div> 
             <div class="form-group"> 
                 <label style='display:block;'>
                 Steps
                 </label>  
                 <div class='list-form'>
-                    <span>1.</span>
-                    <textarea name='steps_1' class="form-control"></textarea>              
+                    {% for step in object.step_set.all%}
+                    <span>{{forloop.counter}}.</span>
+                    <textarea name='steps_{{forloop.counter}}' class="form-control">{{step.description}}</textarea> 
+                    {% endfor %}             
                 </div>
                 <button type='button' id='add' class="btn btn-primary mt-2">+</button>
 
@@ -47,16 +58,14 @@
 
             </div> 
             
-            <div style='text-align:center;'>
-                <button type="submit" class="btn btn-primary btn-large btn-block">Create</button>
-            </div>
+            
+            <button type="submit" class="btn btn-primary btn-large btn-block">Save</button>
         </form>
     </div>
 </div>
-
 <script>
     $(document).ready(function() {
-        var count = 2;
+        var count = {{object.step_set.count}} + 1;
         $("#add").click(function() {
             var listForm = $(".list-form");
             var input = $('<span>' + count +'.</span><textarea name="steps_' + count + ' "class="form-control"></textarea>');
@@ -76,6 +85,8 @@
                 $("#remove").hide()
             }
         });
+
+        
 
         
     });

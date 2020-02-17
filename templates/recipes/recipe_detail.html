@@ -8,8 +8,17 @@
     <div class="container mx-6">
         <div class="row">
             <div class='col-8'>
-                <h2>{{object.name}}</h4>
-                <p>{{object.timestamp|date}} by {{object.user.username}}</p>
+                <div class='row'>
+                    <div class='col-10'>
+                        <h2>{{object.name}}</h4>
+                        <p>{{object.timestamp|date}} by {{object.user.username}}</p>
+                    </div>
+                    {% if object.user == request.user %}
+                    <div class='col-2'>
+                        <a href="{% url 'recipe:update' recipe.pk %}" class="btn btn-primary align-middle">Edit</a>
+                    </div>
+                    {% endif %}
+                </div> 
                 {% for image in object.image_set.all %}
                     <img src="{{image.image.url}}" class="img-fluid" alt="{{object.name}}">
                 {% endfor %}
