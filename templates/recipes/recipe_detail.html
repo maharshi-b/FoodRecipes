@@ -29,17 +29,17 @@
                 <h3>Ingredients</h3>
                 <ul>
                 {% for indredient in object.ingredients.all %}
-                    <li>{{indredient.name}}</li>
+                    <li><h5>{{indredient.name}}</h5></li>
                 {% endfor %}
                 </ul>
                 <hr>
                 <h3>Description</h3>
-                <p>{{object.description}}</p>
+                <p><h5>{{object.description}}</h5></p>
                 <hr>
                 <h3>Preparation Steps</h3>
                 <ol>                
                 {% for step in object.step_set.all %}
-                    <li>{{step.description}}</li>
+                    <h5><li>{{step.description}}<br><br></li><h5>
                 {% endfor %}
                 </ol>
                 

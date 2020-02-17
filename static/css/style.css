@@ -1,6 +1,6 @@
 .nav-font{
     font-family: 'Lemonada', cursive;
-    text-shadow: 2px 2px 2px #aaa;
+    text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5);
 }
 body{
     font-family: 'Montserrat', sans-serif;
